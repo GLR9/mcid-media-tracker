@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Magic City / Zangrillo: Press Coverage Tracker</title>
+<meta name="description" content="Press coverage tracker for Magic City Innovation District and Bob Zangrillo. Updated June 2026.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tablericons/3.0.0/iconfont/tabler-icons.min.css">
+<style>
+:root {
+  --glr: #E4261C;
+  --bg: #FFFFFF;
+  --bg2: #F5F5F5;
+  --bg3: #EFEFEF;
+  --text1: #1A1A1A;
+  --text2: #6B6B6B;
+  --text3: #9E9E9E;
+  --border: rgba(0,0,0,0.09);
+  --border2: rgba(0,0,0,0.18);
+  --info-bg: #E6F1FB;
+  --info-text: #185FA5;
+  --sans: 'Inter', system-ui, sans-serif;
+  --serif: 'DM Serif Display', Georgia, serif;
+  --mono: 'DM Mono', 'Courier New', monospace;
+  --r-md: 8px;
+  --r-lg: 12px;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #141414; --bg2: #1F1F1F; --bg3: #2A2A2A;
+    --text1: #F0F0F0; --text2: #A0A0A0; --text3: #686868;
+    --border: rgba(255,255,255,0.09); --border2: rgba(255,255,255,0.18);
+    --info-bg: #0C2E50; --info-text: #85B7EB;
+  }
+}
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--sans); font-size: 14px; background: var(--bg); color: var(--text1); line-height: 1.6; }
+a { color: var(--info-text); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.wrap { max-width: 1100px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+
+.eye { font-size: 11px; font-weight: 500; color: var(--glr); letter-spacing: .08em; margin-bottom: 5px; }
+.h1 { font-family: var(--serif); font-size: 28px; font-weight: 400; color: var(--text1); margin-bottom: 5px; }
+.meta { font-size: 12px; color: var(--text2); margin-bottom: 1.75rem; }
+.meta-dot { margin: 0 6px; opacity: .4; }
+
+.spark { display: flex; align-items: flex-end; gap: 10px; height: 58px; padding: 10px 0; border-top: 0.5px solid var(--border); border-bottom: 0.5px solid var(--border); margin-bottom: 1.5rem; }
+.sc { display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
+.sb { width: 100%; border-radius: 2px; }
+.sl { font-size: 10px; color: var(--text3); font-family: var(--mono); white-space: nowrap; }
+
+.tabs { display: flex; border-bottom: 0.5px solid var(--border); margin-bottom: 1.5rem; overflow-x: auto; }
+.tab { font-size: 13px; font-weight: 400; color: var(--text2); padding: 8px 14px; border: none; background: none; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -0.5px; white-space: nowrap; transition: color .15s; }
+.tab:hover { color: var(--text1); }
+.tab.on { color: var(--text1); font-weight: 500; border-bottom-color: var(--glr); }
+.tab:focus-visible { outline: 2px solid var(--glr); outline-offset: 2px; }
+.tab-primary { background: var(--bg2); border-radius: 20px 20px 0 0; border: 0.5px solid var(--border) !important; border-bottom: 2px solid transparent !important; color: var(--text1); margin-right: 3px; }
+.tab-primary:hover { background: var(--bg3); }
+.tab-primary.on { background: var(--text1); color: var(--bg); border-bottom-color: var(--text1) !important; }
+
+.pnl { display: none; }
+.pnl.on { display: block; }
+
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 1.5rem; }
+@media (max-width: 600px) { .stats { grid-template-columns: repeat(2, 1fr); } }
+.stat { background: var(--bg2); border-radius: var(--r-md); padding: .875rem 1rem; }
+.stat-lbl { font-size: 11px; color: var(--text2); margin-bottom: 4px; }
+.stat-val { font-size: 26px; font-weight: 500; color: var(--text1); line-height: 1; margin-bottom: 3px; }
+.stat-sub { font-size: 10px; color: var(--text3); }
+
+.sec-lbl { font-size: 11px; font-weight: 500; color: var(--text2); letter-spacing: .06em; margin-bottom: 10px; }
+
+.tier-grid { display: grid; gap: 7px; margin-bottom: 1.5rem; }
+.tier-row { display: flex; align-items: center; gap: 8px; font-size: 12px; }
+.tier-name { width: 130px; color: var(--text2); }
+.tier-bg { flex: 1; height: 5px; background: var(--bg3); border-radius: 3px; overflow: hidden; }
+.tier-fill { height: 100%; border-radius: 3px; background: var(--text2); opacity: .55; }
+.tier-n { width: 14px; font-weight: 500; color: var(--text1); text-align: right; }
+
+.frames { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 1rem; }
+.frame { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--r-lg); padding: .875rem 1rem; }
+.frame-n { font-size: 20px; font-weight: 400; color: var(--border2); font-family: var(--mono); line-height: 1; margin-bottom: 6px; }
+.frame-t { font-size: 13px; font-weight: 500; color: var(--text1); margin-bottom: 4px; }
+.frame-d { font-size: 12px; color: var(--text2); line-height: 1.5; }
+
+.fbar { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1rem; }
+.fb { font-size: 12px; padding: 4px 12px; border: 0.5px solid var(--border2); border-radius: 20px; background: none; cursor: pointer; color: var(--text2); transition: all .15s; }
+.fb:hover { color: var(--text1); border-color: var(--text1); }
+.fb.on { background: var(--text1); color: var(--bg); border-color: var(--text1); }
+
+.tbl-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+table.ct { width: 100%; border-collapse: collapse; font-size: 12px; min-width: 1000px; }
+table.ct th { font-size: 11px; font-weight: 500; color: var(--text2); text-align: left; padding: 7px 10px; border-bottom: 0.5px solid var(--border); white-space: nowrap; background: var(--bg); position: sticky; top: 0; }
+table.ct td { padding: 10px 10px; border-bottom: 0.5px solid var(--border); vertical-align: top; color: var(--text1); }
+table.ct tr.sw td { color: var(--text2); }
+table.ct tr.bk td { color: var(--text3); }
+table.ct tr:last-child td { border-bottom: none; }
+table.ct tr:hover td { background: var(--bg2); }
+
+.bdg { display: inline-block; font-size: 10px; padding: 2px 7px; border-radius: 10px; font-weight: 500; white-space: nowrap; }
+.bdg-f { background: var(--info-bg); color: var(--info-text); }
+.bdg-s { background: var(--bg2); color: var(--text2); }
+.bdg-b { background: var(--bg2); color: var(--text3); }
+
+.reach-h { font-size: 11px; font-weight: 500; color: var(--text1); }
+.reach-l { font-size: 11px; color: var(--text2); }
+.reach-u { font-size: 11px; color: var(--text3); font-style: italic; }
+
+.sd { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 4px; vertical-align: middle; flex-shrink: 0; }
+.sd-pos { background: #3d6b4a; }
+.sd-neu { background: #888780; }
+.sd-mix { background: #b07a1c; }
+.sd-neg { background: #a32d2d; }
+
+.mct-url { font-size: 10px; color: var(--info-text); font-family: var(--mono); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: block; max-width: 220px; }
+.note-text { font-size: 11px; color: var(--text2); line-height: 1.45; }
+.synd-text { font-size: 11px; color: var(--text3); font-style: italic; }
+
+.asm-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1.5rem; }
+@media (max-width: 480px) { .asm-grid { grid-template-columns: 1fr; } }
+.asm-card { background: var(--bg2); border-radius: var(--r-md); padding: .875rem 1rem; }
+.asm-lbl { font-size: 10px; font-weight: 500; color: var(--text2); letter-spacing: .06em; text-transform: uppercase; margin-bottom: 4px; }
+.asm-val { font-size: 14px; font-weight: 500; color: var(--text1); margin-bottom: 3px; }
+.asm-note { font-size: 11px; color: var(--text2); line-height: 1.5; }
+
+.prose { font-size: 13px; line-height: 1.8; color: var(--text1); }
+.prose p { margin-bottom: 1rem; }
+.prose p:last-child { margin-bottom: 0; }
+
+.proto { display: grid; gap: 1.25rem; }
+.ps { display: flex; gap: 14px; }
+.ps-num { width: 26px; height: 26px; border-radius: 50%; background: var(--text1); color: var(--bg); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 500; flex-shrink: 0; margin-top: 1px; }
+.ps-body { flex: 1; }
+.ps-title { font-size: 13px; font-weight: 500; color: var(--text1); margin-bottom: 4px; }
+.ps-detail { font-size: 12px; color: var(--text2); line-height: 1.65; }
+.ps-q { font-family: var(--mono); font-size: 11px; background: var(--bg2); padding: 10px 12px; border-radius: var(--r-md); margin-top: 8px; color: var(--text1); line-height: 1.7; border-left: 2px solid var(--glr); }
+.chips { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-top: 10px; }
+@media (max-width: 480px) { .chips { grid-template-columns: 1fr; } }
+.chip { font-size: 11px; background: var(--bg2); border-radius: var(--r-md); padding: 7px 10px; color: var(--text2); line-height: 1.4; }
+
+footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 0.5px solid var(--border); font-size: 11px; color: var(--text3); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div style="margin-bottom:1.5rem;">
+    <div class="eye">Magic City &nbsp;&middot;&nbsp; Bob Zangrillo</div>
+    <div class="h1">Press coverage tracker</div>
+    <div class="meta">
+      Last updated 22.06.26
+      <span class="meta-dot">&bull;</span>
+      12 mentions tracked
+      <span class="meta-dot">&bull;</span>
+      Story holding, no crossover breakout detected
+    </div>
+  </div>
+
+  <div class="spark" aria-hidden="true">
+    <div class="sc"><div class="sb" style="height:18px;background:var(--text1);opacity:.7;"></div><div class="sl">14 Jun</div></div>
+    <div class="sc"><div class="sb" style="height:34px;background:var(--text1);opacity:.7;"></div><div class="sl">15 Jun</div></div>
+    <div class="sc"><div class="sb" style="height:14px;background:var(--text2);opacity:.45;"></div><div class="sl">16 Jun</div></div>
+    <div class="sc"><div class="sb" style="height:10px;background:var(--text2);opacity:.35;"></div><div class="sl">17 Jun</div></div>
+    <div class="sc"><div class="sb" style="height:7px;background:var(--text2);opacity:.25;"></div><div class="sl">19 Jun</div></div>
+    <div class="sc"><div class="sb" style="height:3px;background:var(--text3);opacity:.2;"></div><div class="sl">22 Jun</div></div>
+  </div>
+
+  <div class="tabs" role="tablist">
+    <button class="tab tab-primary on" data-t="ov" role="tab" aria-selected="true">Overview</button>
+    <button class="tab tab-primary" data-t="as" role="tab" aria-selected="false">Assessment</button>
+    <button class="tab tab-primary" data-t="log" role="tab" aria-selected="false">Coverage log</button>
+    <button class="tab" data-t="pr" role="tab" aria-selected="false">Update protocol</button>
+  </div>
+
+  <!-- OVERVIEW -->
+  <div class="pnl on" id="p-ov" role="tabpanel">
+    <div class="stats">
+      <div class="stat"><div class="stat-lbl">Total mentions</div><div class="stat-val">12</div><div class="stat-sub">Since 09.06.26</div></div>
+      <div class="stat"><div class="stat-lbl">First wave</div><div class="stat-val">7</div><div class="stat-sub">09 to 16 Jun</div></div>
+      <div class="stat"><div class="stat-lbl">Secondary wave</div><div class="stat-val">4</div><div class="stat-sub">17 to 22 Jun</div></div>
+      <div class="stat"><div class="stat-lbl">Background</div><div class="stat-val">1</div><div class="stat-sub">Opposition resurface</div></div>
+    </div>
+    <div class="sec-lbl">By outlet tier</div>
+    <div class="tier-grid" style="margin-bottom:1.5rem;">
+      <div class="tier-row"><span class="tier-name">National / wire</span><div class="tier-bg"><div class="tier-fill" style="width:8%;"></div></div><span class="tier-n">1</span></div>
+      <div class="tier-row"><span class="tier-name">Regional / local</span><div class="tier-bg"><div class="tier-fill" style="width:25%;"></div></div><span class="tier-n">3</span></div>
+      <div class="tier-row"><span class="tier-name">Trade / industry</span><div class="tier-bg"><div class="tier-fill" style="width:25%;"></div></div><span class="tier-n">3</span></div>
+      <div class="tier-row"><span class="tier-name">Blog / alt media</span><div class="tier-bg"><div class="tier-fill" style="width:8%;"></div></div><span class="tier-n">1</span></div>
+      <div class="tier-row"><span class="tier-name">Social</span><div class="tier-bg"><div class="tier-fill" style="width:33%;"></div></div><span class="tier-n">4</span></div>
+    </div>
+    <div class="sec-lbl">Key narrative frames observed</div>
+    <div class="frames">
+      <div class="frame"><div class="frame-n">01</div><div class="frame-t">Revival / comeback</div><div class="frame-d">Dominant framing across all outlets. $3B dormant project back.</div></div>
+      <div class="frame"><div class="frame-n">02</div><div class="frame-t">AI / tech hub pivot</div><div class="frame-d">New pitch: AI ecosystem anchor, not just mixed-use development.</div></div>
+      <div class="frame"><div class="frame-n">03</div><div class="frame-t">Trump pardon hook</div><div class="frame-d">Adds political charge. The mechanism for crossover into mainstream press if picked up wider.</div></div>
+      <div class="frame"><div class="frame-n">04</div><div class="frame-t">Land story</div><div class="frame-d">Instagram layer: "no longer just startups, it is becoming a land story."</div></div>
+      <div class="frame"><div class="frame-n">05</div><div class="frame-t">Displacement concern</div><div class="frame-d">Opposition / gentrification frame persistent. Latent now, will reactivate at next milestone.</div></div>
+    </div>
+  </div>
+
+  <!-- COVERAGE LOG -->
+  <div class="pnl" id="p-log" role="tabpanel">
+    <div class="fbar">
+      <button class="fb on" data-f="all">All (12)</button>
+      <button class="fb" data-f="fw">First wave (7)</button>
+      <button class="fb" data-f="sw">Secondary wave (4)</button>
+      <button class="fb" data-f="bk">Background (1)</button>
+    </div>
+    <div class="tbl-wrap">
+    <table class="ct" aria-label="Full coverage log, 12 press mentions since June 9 2026">
+      <thead>
+        <tr>
+          <th style="min-width:68px;">Date</th>
+          <th style="min-width:130px;">Publication</th>
+          <th style="min-width:90px;">Tier</th>
+          <th style="min-width:220px;">Headline / content</th>
+          <th style="min-width:90px;">Author</th>
+          <th style="min-width:65px;">Format</th>
+          <th style="min-width:80px;">Wave</th>
+          <th style="min-width:65px;">Est. reach</th>
+          <th style="min-width:80px;">Sentiment</th>
+          <th style="min-width:120px;">Syndicated from</th>
+          <th style="min-width:160px;">Notes</th>
+        </tr>
+      </thead>
+      <tbody id="ctb">
+
+        <tr data-w="fw">
+          <td style="font-family:var(--mono);font-size:10px;white-space:nowrap;">14.06.26</td>
+          <td style="font-weight:500;">Bloomberg</td>
+          <td>National / wire</td>
+          <td>Tech investor Zangrillo revives $3B Miami megaproject, pitching it as home for AI companies<br><a class="mct-url" href="https://www.facebook.com/bloombergbusiness/posts/1426471046005651/" target="_blank" rel="noopener">facebook.com/bloombergbusiness&hellip;</a></td>
+          <td>N/A</td>
+          <td>Article</td>
+          <td><span class="bdg bdg-f">First wave</span></td>
+          <td><span class="reach-h">High</span></td>
+          <td><span class="sd sd-pos"></span>Positive</td>
+          <td><span class="synd-text">Source article</span></td>
+          <td><span class="note-text">Source article. Republished widely. All derivatives trace back here.</span></td>
+        </tr>
+
+        <tr data-w="fw">
+          <td style="font-family:var(--mono);font-size:10px;white-space:nowrap;">15.06.26</td>
+          <td style="font-weight:500;">The Real Deal</td>
+          <td>Regional / local</td>
+          <td>Bob Zangrillo revives $3B Miami megaproject<br><a class="mct-url" href="https://therealdeal.com/miami/2026/06/15/bob-zangrillo-revives-3b-miami-megaproject/" target="_blank" rel="noopener">therealdeal.com/miami&hellip;</a></td>
+          <td>N/A</td>
+          <td>Article</td>
+          <td><span class="bdg bdg-f">First wave</span></td>
+          <td><span class="reach-h">High</span></td>
+          <td><span class="sd sd-neu"></span>Neutral</td>
+          <td><span class="synd-text">Bloomberg (derivative)</span></td>
+          <td><span class="note-text">Primary regional coverage. Most reshared of all outlets.</span></td>
+        </tr>
+
+        <tr data-w="fw">
+          <td style="font-family:var(--mono);font-size:10px;white-space:nowrap;">15.06.26</td>
+          <td style="font-weight:500;">Bisnow</td>
+          <td>Trade</td>
+          <td>Tech investor resurrects 7.8M SF megaproject in Miami's Little Haiti<br><a class="mct-url" href="https://www.bisnow.com/south-florida/news/mixed-use/magic-city-innovation-district-zangrillo-little-haiti-miami-135021" target="_blank" rel="noopener">bisnow.com/south-florida&hellip;</a></td>
+          <td>Sasha Jones</td>
+          <td>Article</td>
+          <td><span class="bdg bdg-f">First wave</span></td>
+          <td><span class="reach-h">High</span></td>
+          <td><span class="sd sd-neu"></span>Neutral</td>
+          <td><span class="synd-text">Bloomberg (derivative)</span></td>
+          <td><span class="note-text">Only confirmed byline in the sweep.</span></td>
+        </tr>
+
+        <tr data-w="fw">
+          <td style="font-family:var(--mono);font-size:10px;white-space:nowrap;">15.06.26</td>
+          <td style="font-weight:500;">Floridian Development</td>
+          <td>Trade / blog</td>
+          <td>Bob Zangrillo revives plans for $3B Magic City Innovation District<br><a class="mct-url" href="https://floridiandevelopment.com/bob-zangrillo-revives-plans-for-3-billion-magic-city-innovation-district/" target="_blank" rel="noopener">floridiandevelopment.com&hellip;</a></td>
+          <td>N/A</td>
+          <td>Article</td>
+          <td><span class="bdg bdg-f">First wave</span></td>
+          <td><span class="reach-l">Low</span></td>
+          <td><span class="sd sd-pos"></span>Positive</td>
+          <td><span class="synd-text">Bloomberg / TRD (derivative)</span></td>
+          <td><span class="note-text">Trade vertical rewrite. AI hub angle prominent.</span></td>
+        </tr>
+
+        <tr data-w="fw">
+          <td style="font-family:var(--mono);font-size:10px;white-space:nowrap;">15.06.26</td>
+          <td style="font-weight:500;">Traded.co</td>
+          <td>Blog / alt</td>
+          <td>Zangrillo revives $3B Magic City as AI-focused hub in Little Haiti<br><a class="mct-url" href="https://traded.co/blog/bob-zangrillo-revives-3-billion-magic-city-innovation-district-as-ai-focused-hub-in-little-haiti/" target="_blank" rel="noopener">traded.co/blog&hellip;</a></td>
+          <td>N/A</td>
+          <td>Article</td>
+          <td><span class="bdg bdg-f">First wave</span></td>
+          <td><span class="reach-l">Low</span></td>
+          <td><span class="sd sd-pos"></span>Positive</td>
+          <td><span class="synd-text">Bloomberg / TRD (derivative)</span></td>
+          <td><span class="note-text">CRE blog rewrite. AI hub angle prominently featured.</span></td>
+        </tr>
+
+        <tr data-w="fw">
+          <td style="font-family:var(--mono);font-size:10px;white-space:nowrap;">~15.06.26</td>
+          <td style="font-weight:500;">@Anniesaysitsok</td>
+          <td>Social / X</td>
+          <td>"Dirt actually moving. Tech investor Bob Zangrillo revives $3B Little Haiti megaproject."<br><a class="mct-url" href="https://x.com/Anniesaysitsok" target="_blank" rel="noopener">x.com/Anniesaysitsok</a></td>
+          <td>@Anniesaysitsok</td>
+          <td>Post / X</td>
+          <td><span class="bdg bdg-f">First wave</span></td>
+          <td><span class="reach-u">Unknown</span></td>
+          <td><span class="sd sd-pos"></span>Positive</td>
+          <td><span class="synd-text">TRD / Bloomberg</span></td>
+          <td><span class="note-text">Most visible X hit in sweep. Opinionated, compressed framing rather than straight repost.</span></td>
+        </tr>
+
+        <tr data-w="fw">
+          <td style="font-family:var(--mono);font-size:10px;white-space:nowrap;">16.06.26</td>
+          <td style="font-weight:500;">The Real Deal (Instagram)</td>
+          <td>Social</td>
+          <td>"Miami loves a comeback story. This one comes with a $3 billion price tag."<br><a class="mct-url" href="https://www.instagram.com/reel/DZs2zVwS9Kd/" target="_blank" rel="noopener">instagram.com/reel/DZs2zVwS9Kd</a></td>
+          <td>The Real Deal</td>
+          <td>Reel</td>
+          <td><span class="bdg bdg-f">First wave</span></td>
+          <td><span class="reach-l">Medium</span></td>
+          <td><span class="sd sd-pos"></span>Positive</td>
+          <td><span class="synd-text">TRD Article (15.06.26)</span></td>
+          <td><span class="note-text">Social repackage of own article. First appearance of "Trump-pardoned" framing in a headline.</span></td>
+        </tr>
+
+        <tr data-w="sw" class="sw">
+          <td style="font-family:var(--mono);font-size:10px;white-space:nowrap;">16.06.26</td>
+          <td style="font-weight:500;">The Real Deal (Facebook)</td>
+          <td>Social</td>
+          <td>"Miami loves a comeback story. This one comes with a $3 billion price tag."<br><a class="mct-url" href="https://www.facebook.com/therealdealmedia/posts/1656730886455763/" target="_blank" rel="noopener">facebook.com/therealdealmedia&hellip;</a></td>
+          <td>The Real Deal</td>
+          <td>Post</td>
+          <td><span class="bdg bdg-s">Secondary</span></td>
+          <td><span class="reach-l">Medium</span></td>
+          <td><span class="sd sd-pos"></span>Positive</td>
+          <td><span class="synd-text">TRD Article (15.06.26)</span></td>
+          <td><span class="note-text">Facebook mirror of Instagram reel. Same copy, different platform.</span></td>
+        </tr>
+
+        <tr data-w="sw" class="sw">
+          <td style="font-family:var(--mono);font-size:10px;white-space:nowrap;">17.06.26</td>
+          <td style="font-weight:500;">Hawkins CRE</td>
+          <td>Trade / newsletter</td>
+          <td>Ken Griffin supercharges Miami plans; $3B Little Haiti megaproject revived<br><a class="mct-url" href="https://www.hawkinscre.com/miami-commercial-real-estate-news-june-17-2026-ken-griffin-supercharges-miami-plans-3b-little-haiti-development-megaproject-revived-more/" target="_blank" rel="noopener">hawkinscre.com&hellip;</a></td>
+          <td>N/A</td>
+          <td>Newsletter</td>
+          <td><span class="bdg bdg-s">Secondary</span></td>
+          <td><span class="reach-l">Low</span></td>
+          <td><span class="sd sd-neu"></span>Neutral</td>
+          <td><span class="synd-text">TRD / Bloomberg</span></td>
+          <td><span class="note-text">Bundled in weekly CRE roundup alongside Ken Griffin story. Not standalone coverage.</span></td>
+        </tr>
+
+        <tr data-w="sw" class="sw">
+          <td style="font-family:var(--mono);font-size:10px;white-space:nowrap;">17.06.26</td>
+          <td style="font-weight:500;">Miami RE Instagram accounts</td>
+          <td>Social / Instagram</td>
+          <td>"No longer just about startups, it is becoming a land story. $3B+, Zangrillo back."<br><a class="mct-url" href="https://www.instagram.com/p/DZsjLwFCqVl/" target="_blank" rel="noopener">instagram.com/p/DZsjLwFCqVl</a></td>
+          <td>Multiple accounts</td>
+          <td>Posts</td>
+          <td><span class="bdg bdg-s">Secondary</span></td>
+          <td><span class="reach-u">Unknown</span></td>
+          <td><span class="sd sd-pos"></span>Positive</td>
+          <td><span class="synd-text">TRD / Bisnow</span></td>
+          <td><span class="note-text">Miami RE and design-style account cluster resharing. "Land story" framing distinct from editorial coverage.</span></td>
+        </tr>
+
+        <tr data-w="sw" class="sw">
+          <td style="font-family:var(--mono);font-size:10px;white-space:nowrap;">19.06.26</td>
+          <td style="font-weight:500;">The Real Deal (Video)</td>
+          <td>Regional / local</td>
+          <td>Trump-pardoned investor to revive $3B Miami megaproject<br><a class="mct-url" href="https://therealdeal.com/video/watch/1PlstRKzN78/" target="_blank" rel="noopener">therealdeal.com/video&hellip;</a></td>
+          <td>N/A</td>
+          <td>Video</td>
+          <td><span class="bdg bdg-s">Secondary</span></td>
+          <td><span class="reach-h">High</span></td>
+          <td><span class="sd sd-mix"></span>Mixed</td>
+          <td><span class="synd-text">TRD Article (15.06.26)</span></td>
+          <td><span class="note-text">Later-format follow-up by TRD. "Trump-pardoned" now in the title. Watch for national pickup of this angle.</span></td>
+        </tr>
+
+        <tr data-w="bk" class="bk">
+          <td style="font-family:var(--mono);font-size:10px;white-space:nowrap;">Resurface</td>
+          <td style="font-weight:500;">CBS Miami</td>
+          <td>Regional / local</td>
+          <td>Protest held in Little Haiti over Magic City Innovation District<br><a class="mct-url" href="https://www.cbsnews.com/miami/news/protest-held-in-little-haiti-over-magic-city-innovation-district/" target="_blank" rel="noopener">cbsnews.com/miami&hellip;</a></td>
+          <td>N/A</td>
+          <td>Article</td>
+          <td><span class="bdg bdg-b">Background</span></td>
+          <td><span class="reach-l">Medium</span></td>
+          <td><span class="sd sd-neg"></span>Negative</td>
+          <td><span class="synd-text">Original reporting</span></td>
+          <td><span class="note-text">Older protest coverage resurfacing in search. Opposition narrative. Will reactivate at next commission milestone.</span></td>
+        </tr>
+
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <!-- ASSESSMENT -->
+  <div class="pnl" id="p-as" role="tabpanel">
+    <div class="asm-grid">
+      <div class="asm-card"><div class="asm-lbl">Breadth</div><div class="asm-val">Moderate</div><div class="asm-note">National wire plus key CRE trades. No mainstream crossover yet.</div></div>
+      <div class="asm-card"><div class="asm-lbl">Depth</div><div class="asm-val">Shallow</div><div class="asm-note">Mostly derivatives of Bloomberg and TRD. No investigative follow-ups detected.</div></div>
+      <div class="asm-card"><div class="asm-lbl">Social velocity</div><div class="asm-val">Low to medium</div><div class="asm-note">Instagram more active than X. No viral thread detected.</div></div>
+      <div class="asm-card"><div class="asm-lbl">Trajectory</div><div class="asm-val">Holding</div><div class="asm-note">Secondary wave visible but story not yet amplifying into mainstream press.</div></div>
+    </div>
+    <div class="prose">
+      <p>The story landed where it needed to land. Bloomberg as the source article gave it wire credibility, and The Real Deal plus Bisnow gave it CRE legitimacy on the same day. That is a clean, efficient first wave: national wire, leading regional trade, specialist vertical, and blog derivatives all within 24 hours of launch.</p>
+      <p>What the sweep does not show is crossover into mainstream business press. No Wall Street Journal, no Business Insider, no Forbes pickup detected in this sweep. That is not a failure at this stage of a real estate development story, but it marks the ceiling of the current wave.</p>
+      <p>On social, Instagram is carrying more weight than X. The Real Deal's reel and the Miami real estate account cluster are resharing with boosterish framing, consistent with that platform's orientation toward development optimism. X footprint is present but thin: one notable post from @Anniesaysitsok and no large thread detected under the project name.</p>
+      <p>The frame to watch is the "Trump-pardoned investor" angle. The Real Deal's June 19 video placed that language in the headline, the first instance of it appearing in a title rather than buried in body copy. If that framing gets picked up by political or national business media, it is the mechanism by which this story escapes the CRE vertical and reaches a broader audience.</p>
+      <p>The opposition frame, represented by the CBS Miami protest piece resurfacing in search, remains latent. It will likely reactivate when the project reaches a public review or commission milestone. Not generating new coverage today, but it will.</p>
+      <p>Overall read: story is holding, not building. Appropriate for this stage. The next inflection point will be driven by a specific event: a permit filing, a tenant announcement, a commission hearing, or a national outlet picking up the pardon angle.</p>
+    </div>
+  </div>
+
+  <!-- PROTOCOL -->
+  <div class="pnl" id="p-pr" role="tabpanel">
+    <p style="font-size:13px;color:var(--text2);line-height:1.65;margin-bottom:1.5rem;">Daily workflow to keep the tracker current. Estimated time per update: 5 to 10 minutes.</p>
+    <div class="proto">
+      <div class="ps">
+        <div class="ps-num">1</div>
+        <div class="ps-body">
+          <div class="ps-title">Run the Perplexity sweep</div>
+          <div class="ps-detail">Open Perplexity, set Focus to News, paste the query below and filter to last 24 hours. Do not clean or filter results before bringing them back here.</div>
+          <div class="ps-q">"Bob Zangrillo" OR "Magic City Innovation District" OR "Magic City Miami"<br>Filter: last 24 hours<br>Output: publication name, headline, date, author if available, URL<br>Group by tier: national wire first, then regional, then trade, then blogs, then social</div>
+        </div>
+      </div>
+      <div class="ps">
+        <div class="ps-num">2</div>
+        <div class="ps-body">
+          <div class="ps-title">Paste raw output to Claude</div>
+          <div class="ps-detail">Paste the Perplexity output directly into the tracking conversation. Claude cleans it, deduplicates, tiers outlets, scores sentiment, adds new rows to the coverage log, and updates the assessment if the trajectory has shifted. No prep needed on your end.</div>
+        </div>
+      </div>
+      <div class="ps">
+        <div class="ps-num">3</div>
+        <div class="ps-body">
+          <div class="ps-title">Watch for these escalation triggers</div>
+          <div class="ps-detail">These events represent a meaningful shift and warrant a separate alert rather than waiting for the daily sweep.</div>
+          <div class="chips">
+            <div class="chip"><i class="ti ti-alert-triangle" style="font-size:13px;vertical-align:-1px;margin-right:4px;" aria-hidden="true"></i>National outlet picks up the pardon angle</div>
+            <div class="chip"><i class="ti ti-alert-triangle" style="font-size:13px;vertical-align:-1px;margin-right:4px;" aria-hidden="true"></i>Commission hearing or permit filing announced</div>
+            <div class="chip"><i class="ti ti-alert-triangle" style="font-size:13px;vertical-align:-1px;margin-right:4px;" aria-hidden="true"></i>Tenant or partnership announcement</div>
+            <div class="chip"><i class="ti ti-alert-triangle" style="font-size:13px;vertical-align:-1px;margin-right:4px;" aria-hidden="true"></i>Protest or opposition press release</div>
+          </div>
+        </div>
+      </div>
+      <div class="ps">
+        <div class="ps-num">4</div>
+        <div class="ps-body">
+          <div class="ps-title">Google Alerts as a passive backstop</div>
+          <div class="ps-detail">Set two Google Alerts running in the background as a passive parallel feed with daily digest delivery. These catch anything the Perplexity sweep misses and require no daily action from you.<br><br>Alert 1: "Bob Zangrillo"<br>Alert 2: "Magic City Innovation District"</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    Magic City / Zangrillo coverage tracker &nbsp;&middot;&nbsp; Updated 22.06.26 &nbsp;&middot;&nbsp; Confidential
+  </footer>
+
+</div>
+<script>
+(function(){
+  var tabs=document.querySelectorAll('.tab'),pnls=document.querySelectorAll('.pnl');
+  var map={ov:'p-ov',log:'p-log',as:'p-as',pr:'p-pr'};
+  tabs.forEach(function(t){
+    t.addEventListener('click',function(){
+      tabs.forEach(function(x){x.classList.remove('on');x.setAttribute('aria-selected','false');});
+      pnls.forEach(function(p){p.classList.remove('on');});
+      t.classList.add('on');t.setAttribute('aria-selected','true');
+      document.getElementById(map[t.getAttribute('data-t')]).classList.add('on');
+    });
+  });
+  var fbs=document.querySelectorAll('.fb'),rows=document.querySelectorAll('#ctb tr');
+  fbs.forEach(function(b){
+    b.addEventListener('click',function(){
+      var f=b.getAttribute('data-f');
+      fbs.forEach(function(x){x.classList.remove('on');});
+      b.classList.add('on');
+      rows.forEach(function(r){
+        r.style.display=(f==='all'||r.getAttribute('data-w')===f)?'':'none';
+      });
+    });
+  });
+})();
+</script>
+</body>
+</html>
