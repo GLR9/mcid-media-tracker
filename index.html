@@ -125,6 +125,12 @@ table.ct tr.pend:hover td { background: var(--pend-bg); }
 .chips { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-top: 10px; }
 @media (max-width: 480px) { .chips { grid-template-columns: 1fr; } }
 .chip { font-size: 11px; background: var(--bg2); border-radius: var(--r-md); padding: 7px 10px; color: var(--text2); line-height: 1.4; }
+.kpi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 1.5rem; }
+@media (max-width: 600px) { .kpi-grid { grid-template-columns: 1fr; } }
+.kpi-card { background: var(--bg); border: 0.5px solid var(--border); border-left: 3px solid var(--glr); border-radius: var(--r-md); padding: 1rem 1.1rem; }
+.kpi-label { font-size: 10px; font-weight: 500; color: var(--text2); letter-spacing: .06em; text-transform: uppercase; margin-bottom: 6px; }
+.kpi-val { font-family: var(--serif); font-size: 20px; font-weight: 400; color: var(--text1); line-height: 1.2; margin-bottom: 5px; }
+.kpi-sub { font-size: 11px; color: var(--text2); line-height: 1.5; }
 footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 0.5px solid var(--border); font-size: 11px; color: var(--text3); }
 .updated-badge { display: inline-block; background: var(--glr); color: #fff; font-size: 11px; font-weight: 500; padding: 3px 11px; border-radius: 20px; letter-spacing: .02em; }
 </style>
@@ -174,6 +180,25 @@ footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 0.5px solid var(--bo
       <div class="tier-row"><span class="tier-name">Trade / industry</span><div class="tier-bg"><div class="tier-fill" style="width:19%;"></div></div><span class="tier-n">4</span></div>
       <div class="tier-row"><span class="tier-name">Blog / alt media</span><div class="tier-bg"><div class="tier-fill" style="width:5%;"></div></div><span class="tier-n">1</span></div>
       <div class="tier-row"><span class="tier-name">Social / video</span><div class="tier-bg"><div class="tier-fill" style="width:48%;"></div></div><span class="tier-n">10</span></div>
+    </div>
+
+    <div class="sec-lbl">Key metrics</div>
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-label">Reach</div>
+        <div class="kpi-val">20 mentions</div>
+        <div class="kpi-sub">5 platforms &nbsp;&middot;&nbsp; 8 days</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Trajectory</div>
+        <div class="kpi-val">Building</div>
+        <div class="kpi-sub">11 secondary wave vs 9 first wave</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Sentiment</div>
+        <div class="kpi-val">Positive to neutral</div>
+        <div class="kpi-sub">No significant negative editorial coverage</div>
+      </div>
     </div>
   </div>
 
