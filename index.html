@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Magic City Innovation District: Press Coverage Tracker</title>
-<meta name="description" content="Press coverage tracker for Magic City Innovation District and Bob Zangrillo. Updated June 2026.">
+<meta name="description" content="Press coverage tracker for Magic City Innovation District. Updated June 2026.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -16,7 +16,7 @@
   --text1: #1A1A1A; --text2: #6B6B6B; --text3: #9E9E9E;
   --border: rgba(0,0,0,0.09); --border2: rgba(0,0,0,0.18);
   --info-bg: #E6F1FB; --info-text: #185FA5;
-  --pend-bg: #FFFACD; --pend-text: #7A6000;
+  --up: #3d6b4a;
   --sans: 'Inter', system-ui, sans-serif;
   --serif: 'DM Serif Display', Georgia, serif;
   --mono: 'DM Mono', 'Courier New', monospace;
@@ -28,7 +28,6 @@
     --text1: #F0F0F0; --text2: #A0A0A0; --text3: #686868;
     --border: rgba(255,255,255,0.09); --border2: rgba(255,255,255,0.18);
     --info-bg: #0C2E50; --info-text: #85B7EB;
-    --pend-bg: #3A3000; --pend-text: #E8C840;
   }
 }
 *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -37,14 +36,18 @@ body { font-family: var(--sans); font-size: 14px; background: var(--bg); color: 
 a { color: var(--info-text); text-decoration: none; }
 a:hover { text-decoration: underline; }
 .wrap { max-width: 1100px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+
 .eye { font-size: 11px; font-weight: 500; color: var(--glr); letter-spacing: .08em; margin-bottom: 5px; }
-.h1 { font-family: var(--serif); font-size: 28px; font-weight: 400; color: var(--text1); margin-bottom: 5px; }
-.meta { font-size: 12px; color: var(--text2); margin-bottom: 1.75rem; }
+.h1 { font-family: var(--serif); font-size: 28px; font-weight: 400; color: var(--text1); margin-bottom: 8px; }
+.updated-badge { display: inline-block; background: var(--glr); color: #fff; font-size: 11px; font-weight: 500; padding: 3px 11px; border-radius: 20px; letter-spacing: .02em; }
 .meta-dot { margin: 0 6px; opacity: .4; }
-.spark { display: flex; align-items: flex-end; gap: 6px; height: 58px; padding: 10px 0; border-top: 0.5px solid var(--border); border-bottom: 0.5px solid var(--border); margin-bottom: 1.5rem; }
+
+.spark { display: flex; align-items: flex-end; gap: 5px; height: 58px; padding: 10px 0; border-top: 0.5px solid var(--border); border-bottom: 0.5px solid var(--border); margin-bottom: 1.5rem; }
 .sc { display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
 .sb { width: 100%; border-radius: 2px; }
-.sl { font-size: 10px; color: var(--text3); font-family: var(--mono); white-space: nowrap; }
+.sb-new { outline: 1.5px solid var(--glr); outline-offset: 1px; }
+.sl { font-size: 9px; color: var(--text3); font-family: var(--mono); white-space: nowrap; }
+
 .tabs { display: flex; border-bottom: 0.5px solid var(--border); margin-bottom: 1.5rem; overflow-x: auto; }
 .tab { font-size: 13px; font-weight: 400; color: var(--text2); padding: 8px 14px; border: none; background: none; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -0.5px; white-space: nowrap; transition: color .15s; }
 .tab:hover { color: var(--text1); }
@@ -53,46 +56,58 @@ a:hover { text-decoration: underline; }
 .tab-primary { background: var(--bg2); border-radius: 20px 20px 0 0; border: 0.5px solid var(--border) !important; border-bottom: 2px solid transparent !important; color: var(--text1); margin-right: 3px; }
 .tab-primary:hover { background: var(--bg3); }
 .tab-primary.on { background: var(--text1); color: var(--bg); border-bottom-color: var(--text1) !important; }
+
 .pnl { display: none; }
 .pnl.on { display: block; }
+
 .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 1.5rem; }
 @media (max-width: 600px) { .stats { grid-template-columns: repeat(2, 1fr); } }
 .stat { background: var(--bg2); border-radius: var(--r-md); padding: .875rem 1rem; }
 .stat-lbl { font-size: 11px; color: var(--text2); margin-bottom: 4px; }
 .stat-val { font-size: 26px; font-weight: 500; color: var(--text1); line-height: 1; margin-bottom: 3px; }
 .stat-sub { font-size: 10px; color: var(--text3); }
+.stat-delta { font-size: 11px; font-weight: 500; color: var(--up); margin-top: 3px; }
+.stat-flat { font-size: 11px; color: var(--text3); margin-top: 3px; }
+
 .sec-lbl { font-size: 11px; font-weight: 500; color: var(--text2); letter-spacing: .06em; margin-bottom: 10px; }
+
 .tier-grid { display: grid; gap: 7px; margin-bottom: 1.5rem; }
 .tier-row { display: flex; align-items: center; gap: 8px; font-size: 12px; }
 .tier-name { width: 130px; color: var(--text2); }
 .tier-bg { flex: 1; height: 5px; background: var(--bg3); border-radius: 3px; overflow: hidden; }
 .tier-fill { height: 100%; border-radius: 3px; background: var(--text2); opacity: .55; }
 .tier-n { width: 14px; font-weight: 500; color: var(--text1); text-align: right; }
-.frames { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 1rem; }
-.frame { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--r-lg); padding: .875rem 1rem; }
-.frame-n { font-size: 20px; font-weight: 400; color: var(--border2); font-family: var(--mono); line-height: 1; margin-bottom: 6px; }
-.frame-t { font-size: 13px; font-weight: 500; color: var(--text1); margin-bottom: 4px; }
-.frame-d { font-size: 12px; color: var(--text2); line-height: 1.5; }
+
+.kpi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 1.5rem; }
+@media (max-width: 600px) { .kpi-grid { grid-template-columns: 1fr; } }
+.kpi-card { background: var(--bg); border: 0.5px solid var(--border); border-left: 3px solid var(--glr); border-radius: var(--r-md); padding: 1rem 1.1rem; }
+.kpi-label { font-size: 10px; font-weight: 500; color: var(--text2); letter-spacing: .06em; text-transform: uppercase; margin-bottom: 6px; }
+.kpi-val { font-family: var(--serif); font-size: 20px; font-weight: 400; color: var(--text1); line-height: 1.2; margin-bottom: 5px; }
+.kpi-sub { font-size: 11px; color: var(--text2); line-height: 1.5; }
+
 .fbar { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1rem; }
 .fb { font-size: 12px; padding: 4px 12px; border: 0.5px solid var(--border2); border-radius: 20px; background: none; cursor: pointer; color: var(--text2); transition: all .15s; }
 .fb:hover { color: var(--text1); border-color: var(--text1); }
 .fb.on { background: var(--text1); color: var(--bg); border-color: var(--text1); }
+.fb-new { border-color: var(--glr); color: var(--glr); }
+.fb-new.on { background: var(--glr); color: #fff; border-color: var(--glr); }
+
 .tbl-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 table.ct { width: 100%; border-collapse: collapse; font-size: 12px; min-width: 1000px; }
 table.ct th { font-size: 11px; font-weight: 500; color: var(--text2); text-align: left; padding: 7px 10px; border-bottom: 0.5px solid var(--border); white-space: nowrap; background: var(--bg); }
 table.ct td { padding: 10px 10px; border-bottom: 0.5px solid var(--border); vertical-align: top; color: var(--text1); }
 table.ct tr.sw td { color: var(--text2); }
 table.ct tr.bk td { color: var(--text3); }
-table.ct tr.pend td { background: var(--pend-bg); }
-table.ct tr:last-child td { border-bottom: none; }
+table.ct tr[data-new="true"] td { background: rgba(228,38,28,0.03); }
 table.ct tr:hover td { background: var(--bg2); }
-table.ct tr.pend:hover td { background: var(--pend-bg); }
+table.ct tr:last-child td { border-bottom: none; }
+
 .bdg { display: inline-block; font-size: 10px; padding: 2px 7px; border-radius: 10px; font-weight: 500; white-space: nowrap; }
 .bdg-f { background: var(--info-bg); color: var(--info-text); }
 .bdg-s { background: var(--bg2); color: var(--text2); }
 .bdg-b { background: var(--bg2); color: var(--text3); }
-.bdg-p { background: var(--pend-bg); color: var(--pend-text); }
-.bdg-o { background: var(--bg3); color: var(--text3); }
+.new-bdg { display: inline-block; font-size: 9px; padding: 1px 6px; border-radius: 8px; background: var(--glr); color: white; font-weight: 500; margin-left: 5px; vertical-align: middle; }
+
 .reach-h { font-size: 11px; font-weight: 500; color: var(--text1); }
 .reach-l { font-size: 11px; color: var(--text2); }
 .reach-u { font-size: 11px; color: var(--text3); font-style: italic; }
@@ -101,20 +116,18 @@ table.ct tr.pend:hover td { background: var(--pend-bg); }
 .sd-neu { background: #888780; }
 .sd-mix { background: #b07a1c; }
 .sd-neg { background: #a32d2d; }
-.sd-pnd { background: var(--pend-text); }
 .mct-url { font-size: 10px; color: var(--info-text); font-family: var(--mono); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: block; max-width: 220px; }
 .note-text { font-size: 11px; color: var(--text2); line-height: 1.45; }
 .synd-text { font-size: 11px; color: var(--text3); font-style: italic; }
+
 .asm-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1.5rem; }
 @media (max-width: 480px) { .asm-grid { grid-template-columns: 1fr; } }
 .asm-card { background: var(--bg2); border-radius: var(--r-md); padding: .875rem 1rem; }
 .asm-lbl { font-size: 10px; font-weight: 500; color: var(--text2); letter-spacing: .06em; text-transform: uppercase; margin-bottom: 4px; }
 .asm-val { font-size: 14px; font-weight: 500; color: var(--text1); margin-bottom: 3px; }
-.asm-val-up { color: #3d6b4a; }
+.asm-val-up { color: var(--up); }
 .asm-note { font-size: 11px; color: var(--text2); line-height: 1.5; }
-.prose { font-size: 13px; line-height: 1.8; color: var(--text1); }
-.prose p { margin-bottom: 1rem; }
-.prose p:last-child { margin-bottom: 0; }
+
 .proto { display: grid; gap: 1.25rem; }
 .ps { display: flex; gap: 14px; }
 .ps-num { width: 26px; height: 26px; border-radius: 50%; background: var(--text1); color: var(--bg); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 500; flex-shrink: 0; margin-top: 1px; }
@@ -125,14 +138,7 @@ table.ct tr.pend:hover td { background: var(--pend-bg); }
 .chips { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-top: 10px; }
 @media (max-width: 480px) { .chips { grid-template-columns: 1fr; } }
 .chip { font-size: 11px; background: var(--bg2); border-radius: var(--r-md); padding: 7px 10px; color: var(--text2); line-height: 1.4; }
-.kpi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 1.5rem; }
-@media (max-width: 600px) { .kpi-grid { grid-template-columns: 1fr; } }
-.kpi-card { background: var(--bg); border: 0.5px solid var(--border); border-left: 3px solid var(--glr); border-radius: var(--r-md); padding: 1rem 1.1rem; }
-.kpi-label { font-size: 10px; font-weight: 500; color: var(--text2); letter-spacing: .06em; text-transform: uppercase; margin-bottom: 6px; }
-.kpi-val { font-family: var(--serif); font-size: 20px; font-weight: 400; color: var(--text1); line-height: 1.2; margin-bottom: 5px; }
-.kpi-sub { font-size: 11px; color: var(--text2); line-height: 1.5; }
 footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 0.5px solid var(--border); font-size: 11px; color: var(--text3); }
-.updated-badge { display: inline-block; background: var(--glr); color: #fff; font-size: 11px; font-weight: 500; padding: 3px 11px; border-radius: 20px; letter-spacing: .02em; }
 </style>
 </head>
 <body>
@@ -142,8 +148,8 @@ footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 0.5px solid var(--bo
     <div class="eye">Magic City Innovation District</div>
     <div class="h1">Press coverage tracker</div>
     <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:.5rem;">
-      <span class="updated-badge">Updated 22.06.26</span>
-      <span style="font-size:12px;color:var(--text2);">20 mentions tracked &nbsp;&middot;&nbsp; Story building across platforms</span>
+      <span class="updated-badge">Updated 26.06.26</span>
+      <span style="font-size:12px;color:var(--text2);">26 mentions tracked <span class="meta-dot">&bull;</span> Story building across platforms</span>
     </div>
   </div>
 
@@ -151,11 +157,14 @@ footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 0.5px solid var(--bo
     <div class="sc"><div class="sb" style="height:6px;background:var(--text1);opacity:.7;"></div><div class="sl">14 Jun</div></div>
     <div class="sc"><div class="sb" style="height:34px;background:var(--text1);opacity:.7;"></div><div class="sl">15 Jun</div></div>
     <div class="sc"><div class="sb" style="height:18px;background:var(--text1);opacity:.6;"></div><div class="sl">16 Jun</div></div>
-    <div class="sc"><div class="sb" style="height:14px;background:var(--text2);opacity:.45;"></div><div class="sl">17 Jun</div></div>
+    <div class="sc"><div class="sb" style="height:18px;background:var(--text2);opacity:.45;"></div><div class="sl">17 Jun</div></div>
     <div class="sc"><div class="sb" style="height:18px;background:var(--text2);opacity:.4;"></div><div class="sl">18 Jun</div></div>
     <div class="sc"><div class="sb" style="height:6px;background:var(--text2);opacity:.35;"></div><div class="sl">19 Jun</div></div>
     <div class="sc"><div class="sb" style="height:12px;background:var(--text2);opacity:.3;"></div><div class="sl">20 Jun</div></div>
     <div class="sc"><div class="sb" style="height:6px;background:var(--text2);opacity:.25;"></div><div class="sl">21 Jun</div></div>
+    <div class="sc"><div class="sb sb-new" style="height:6px;background:var(--glr);opacity:.7;"></div><div class="sl" style="color:var(--glr);">22 Jun</div></div>
+    <div class="sc"><div class="sb sb-new" style="height:6px;background:var(--glr);opacity:.6;"></div><div class="sl" style="color:var(--glr);">23 Jun</div></div>
+    <div class="sc"><div class="sb sb-new" style="height:12px;background:var(--glr);opacity:.6;"></div><div class="sl" style="color:var(--glr);">25 Jun</div></div>
   </div>
 
   <div class="tabs" role="tablist">
@@ -168,31 +177,48 @@ footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 0.5px solid var(--bo
   <!-- OVERVIEW -->
   <div class="pnl on" id="p-ov" role="tabpanel">
     <div class="stats">
-      <div class="stat"><div class="stat-lbl">Total mentions</div><div class="stat-val">20</div><div class="stat-sub">Since 09.06.26</div></div>
-      <div class="stat"><div class="stat-lbl">First wave</div><div class="stat-val">9</div><div class="stat-sub">09 to 16 Jun</div></div>
-      <div class="stat"><div class="stat-lbl">Secondary wave</div><div class="stat-val">11</div><div class="stat-sub">17 to 22 Jun</div></div>
-      <div class="stat"><div class="stat-lbl">Background</div><div class="stat-val">1</div><div class="stat-sub">Opposition resurface</div></div>
+      <div class="stat">
+        <div class="stat-lbl">Total mentions</div>
+        <div class="stat-val">26</div>
+        <div class="stat-delta">+5 this week</div>
+      </div>
+      <div class="stat">
+        <div class="stat-lbl">First wave</div>
+        <div class="stat-val">9</div>
+        <div class="stat-flat">No change</div>
+      </div>
+      <div class="stat">
+        <div class="stat-lbl">Secondary wave</div>
+        <div class="stat-val">16</div>
+        <div class="stat-delta">+5 this week</div>
+      </div>
+      <div class="stat">
+        <div class="stat-lbl">Background</div>
+        <div class="stat-val">1</div>
+        <div class="stat-flat">No change</div>
+      </div>
     </div>
+
     <div class="sec-lbl">By outlet tier</div>
     <div class="tier-grid" style="margin-bottom:1.5rem;">
-      <div class="tier-row"><span class="tier-name">National / wire</span><div class="tier-bg"><div class="tier-fill" style="width:9%;"></div></div><span class="tier-n">2</span></div>
-      <div class="tier-row"><span class="tier-name">Regional / local</span><div class="tier-bg"><div class="tier-fill" style="width:19%;"></div></div><span class="tier-n">4</span></div>
-      <div class="tier-row"><span class="tier-name">Trade / industry</span><div class="tier-bg"><div class="tier-fill" style="width:19%;"></div></div><span class="tier-n">4</span></div>
-      <div class="tier-row"><span class="tier-name">Blog / alt media</span><div class="tier-bg"><div class="tier-fill" style="width:5%;"></div></div><span class="tier-n">1</span></div>
-      <div class="tier-row"><span class="tier-name">Social / video</span><div class="tier-bg"><div class="tier-fill" style="width:48%;"></div></div><span class="tier-n">10</span></div>
+      <div class="tier-row"><span class="tier-name">National / wire</span><div class="tier-bg"><div class="tier-fill" style="width:14%;"></div></div><span class="tier-n">2</span></div>
+      <div class="tier-row"><span class="tier-name">Regional / local</span><div class="tier-bg"><div class="tier-fill" style="width:36%;"></div></div><span class="tier-n">5</span></div>
+      <div class="tier-row"><span class="tier-name">Trade / industry</span><div class="tier-bg"><div class="tier-fill" style="width:29%;"></div></div><span class="tier-n">4</span></div>
+      <div class="tier-row"><span class="tier-name">Blog / alt media</span><div class="tier-bg"><div class="tier-fill" style="width:7%;"></div></div><span class="tier-n">1</span></div>
+      <div class="tier-row"><span class="tier-name">Social / video</span><div class="tier-bg"><div class="tier-fill" style="width:100%;"></div></div><span class="tier-n">14</span></div>
     </div>
 
     <div class="sec-lbl">Key metrics</div>
     <div class="kpi-grid">
       <div class="kpi-card">
         <div class="kpi-label">Reach</div>
-        <div class="kpi-val">20 mentions</div>
-        <div class="kpi-sub">5 platforms &nbsp;&middot;&nbsp; 8 days</div>
+        <div class="kpi-val">26 mentions</div>
+        <div class="kpi-sub">6 platforms &nbsp;&middot;&nbsp; 12 days</div>
       </div>
       <div class="kpi-card">
         <div class="kpi-label">Trajectory</div>
         <div class="kpi-val">Building</div>
-        <div class="kpi-sub">11 secondary wave vs 9 first wave</div>
+        <div class="kpi-sub">Secondary wave at 16 and growing</div>
       </div>
       <div class="kpi-card">
         <div class="kpi-label">Sentiment</div>
@@ -205,17 +231,18 @@ footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 0.5px solid var(--bo
   <!-- COVERAGE LOG -->
   <div class="pnl" id="p-log" role="tabpanel">
     <div class="fbar">
-      <button class="fb on" data-f="all">All (20)</button>
+      <button class="fb on" data-f="all">All (26)</button>
       <button class="fb" data-f="fw">First wave (9)</button>
-      <button class="fb" data-f="sw">Secondary wave (11)</button>
+      <button class="fb" data-f="sw">Secondary wave (16)</button>
       <button class="fb" data-f="bk">Background (1)</button>
+      <button class="fb fb-new" data-f="new">New this week (5)</button>
     </div>
     <div class="tbl-wrap">
-    <table class="ct" aria-label="Full coverage log, 21 press mentions since June 9 2026">
+    <table class="ct" aria-label="Full coverage log, 26 press mentions since June 14 2026">
       <thead>
         <tr>
           <th style="min-width:68px;">Date</th>
-          <th style="min-width:160px;">Publication</th>
+          <th style="min-width:175px;">Publication</th>
           <th style="min-width:100px;">Tier</th>
           <th style="min-width:220px;">Headline / content</th>
           <th style="min-width:90px;">Author</th>
@@ -234,8 +261,7 @@ footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 0.5px solid var(--bo
           <td style="font-weight:500;">Bloomberg</td>
           <td>National / wire</td>
           <td>Miami tech investor revives $3 billion real estate development<br><a class="mct-url" href="https://www.bloomberg.com/news/articles/2026-06-15/miami-tech-investor-revives-3-billion-real-estate-development" target="_blank" rel="noopener">bloomberg.com/news/articles&hellip;</a></td>
-          <td>N/A</td>
-          <td>Article</td>
+          <td>N/A</td><td>Article</td>
           <td><span class="bdg bdg-f">First wave</span></td>
           <td><span class="reach-h">High</span></td>
           <td><span class="sd sd-pos"></span>Positive</td>
@@ -248,8 +274,7 @@ footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 0.5px solid var(--bo
           <td style="font-weight:500;">The Real Deal</td>
           <td>Regional / local</td>
           <td>Bob Zangrillo revives $3B Miami megaproject<br><a class="mct-url" href="https://therealdeal.com/miami/2026/06/15/bob-zangrillo-revives-3b-miami-megaproject/" target="_blank" rel="noopener">therealdeal.com/miami&hellip;</a></td>
-          <td>Eman Elshahawy</td>
-          <td>Article</td>
+          <td>Eman Elshahawy</td><td>Article</td>
           <td><span class="bdg bdg-f">First wave</span></td>
           <td><span class="reach-h">High</span></td>
           <td><span class="sd sd-neu"></span>Neutral</td>
@@ -262,8 +287,7 @@ footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 0.5px solid var(--bo
           <td style="font-weight:500;">Bisnow</td>
           <td>Trade</td>
           <td>Tech investor resurrects 7.8M SF megaproject in Miami's Little Haiti<br><a class="mct-url" href="https://www.bisnow.com/south-florida/news/mixed-use/magic-city-innovation-district-zangrillo-little-haiti-miami-135021" target="_blank" rel="noopener">bisnow.com/south-florida&hellip;</a></td>
-          <td>Sasha Jones</td>
-          <td>Article</td>
+          <td>Sasha Jones</td><td>Article</td>
           <td><span class="bdg bdg-f">First wave</span></td>
           <td><span class="reach-h">High</span></td>
           <td><span class="sd sd-neu"></span>Neutral</td>
@@ -276,13 +300,12 @@ footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 0.5px solid var(--bo
           <td style="font-weight:500;">CityBiz</td>
           <td>Regional / local</td>
           <td>Bob Zangrillo revives $3 billion Magic City Innovation District in Miami's Little Haiti<br><a class="mct-url" href="https://citybiz.co" target="_blank" rel="noopener">citybiz.co&hellip;</a></td>
-          <td>N/A</td>
-          <td>Article</td>
+          <td>N/A</td><td>Article</td>
           <td><span class="bdg bdg-f">First wave</span></td>
           <td><span class="reach-l">Low</span></td>
           <td><span class="sd sd-pos"></span>Positive</td>
           <td><span class="synd-text">Bloomberg / TRD (derivative)</span></td>
-          <td><span class="note-text">Regional business news vertical. Rewrite of Bloomberg / TRD story.</span></td>
+          <td><span class="note-text">Regional business news vertical rewrite.</span></td>
         </tr>
 
         <tr data-w="fw">
@@ -290,8 +313,7 @@ footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 0.5px solid var(--bo
           <td style="font-weight:500;">Floridian Development</td>
           <td>Trade / blog</td>
           <td>Bob Zangrillo revives plans for $3B Magic City Innovation District<br><a class="mct-url" href="https://floridiandevelopment.com/bob-zangrillo-revives-plans-for-3-billion-magic-city-innovation-district/" target="_blank" rel="noopener">floridiandevelopment.com&hellip;</a></td>
-          <td>N/A</td>
-          <td>Article</td>
+          <td>N/A</td><td>Article</td>
           <td><span class="bdg bdg-f">First wave</span></td>
           <td><span class="reach-l">Low</span></td>
           <td><span class="sd sd-pos"></span>Positive</td>
@@ -304,8 +326,7 @@ footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 0.5px solid var(--bo
           <td style="font-weight:500;">Traded.co</td>
           <td>Blog / alt</td>
           <td>Zangrillo revives $3B Magic City as AI-focused hub in Little Haiti<br><a class="mct-url" href="https://traded.co/blog/bob-zangrillo-revives-3-billion-magic-city-innovation-district-as-ai-focused-hub-in-little-haiti/" target="_blank" rel="noopener">traded.co/blog&hellip;</a></td>
-          <td>N/A</td>
-          <td>Article</td>
+          <td>N/A</td><td>Article</td>
           <td><span class="bdg bdg-f">First wave</span></td>
           <td><span class="reach-l">Low</span></td>
           <td><span class="sd sd-pos"></span>Positive</td>
@@ -317,14 +338,13 @@ footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 0.5px solid var(--bo
           <td style="font-family:var(--mono);font-size:10px;white-space:nowrap;">16.06.26</td>
           <td style="font-weight:500;">Insurance Journal</td>
           <td>Trade / industry</td>
-          <td>Miami tech investor revives $3 billion real estate development<br><a class="mct-url" href="https://www.insurancejournal.com/news/southeast/2026/06/16/873798.htm" target="_blank" rel="noopener">insurancejournal.com/news/southeast&hellip;</a></td>
-          <td>N/A</td>
-          <td>Article</td>
+          <td>Miami tech investor revives $3 billion real estate development<br><a class="mct-url" href="https://www.insurancejournal.com/news/southeast/2026/06/16/873798.htm" target="_blank" rel="noopener">insurancejournal.com&hellip;</a></td>
+          <td>N/A</td><td>Article</td>
           <td><span class="bdg bdg-f">First wave</span></td>
           <td><span class="reach-l">Medium</span></td>
           <td><span class="sd sd-neu"></span>Neutral</td>
           <td><span class="synd-text">Bloomberg (syndicated)</span></td>
-          <td><span class="note-text">Notable: story crossed into insurance and financial services trade readership, a distinct professional audience.</span></td>
+          <td><span class="note-text">Story crossed into insurance and financial services trade readership.</span></td>
         </tr>
 
         <tr data-w="fw">
@@ -332,13 +352,12 @@ footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 0.5px solid var(--bo
           <td style="font-weight:500;">@Anniesaysitsok</td>
           <td>Social / X</td>
           <td>"Dirt actually moving. Tech investor Bob Zangrillo revives $3B Little Haiti megaproject."<br><a class="mct-url" href="https://x.com/Anniesaysitsok" target="_blank" rel="noopener">x.com/Anniesaysitsok</a></td>
-          <td>@Anniesaysitsok</td>
-          <td>Post / X</td>
+          <td>@Anniesaysitsok</td><td>Post / X</td>
           <td><span class="bdg bdg-f">First wave</span></td>
           <td><span class="reach-u">Unknown</span></td>
           <td><span class="sd sd-pos"></span>Positive</td>
           <td><span class="synd-text">TRD / Bloomberg</span></td>
-          <td><span class="note-text">Most visible X hit in sweep. Opinionated framing rather than straight repost.</span></td>
+          <td><span class="note-text">Most visible X hit in sweep. Opinionated framing.</span></td>
         </tr>
 
         <tr data-w="fw">
@@ -346,13 +365,12 @@ footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 0.5px solid var(--bo
           <td style="font-weight:500;">The Real Deal (Instagram)</td>
           <td>Social</td>
           <td>"Miami loves a comeback story. This one comes with a $3 billion price tag."<br><a class="mct-url" href="https://www.instagram.com/reel/DZs2zVwS9Kd/" target="_blank" rel="noopener">instagram.com/reel/DZs2zVwS9Kd</a></td>
-          <td>The Real Deal</td>
-          <td>Reel</td>
+          <td>The Real Deal</td><td>Reel</td>
           <td><span class="bdg bdg-f">First wave</span></td>
           <td><span class="reach-l">Medium</span></td>
           <td><span class="sd sd-pos"></span>Positive</td>
           <td><span class="synd-text">TRD Article (15.06.26)</span></td>
-          <td><span class="note-text">Social repackage of own article. First appearance of Trump-pardoned framing in a headline.</span></td>
+          <td><span class="note-text">Social repackage of own article.</span></td>
         </tr>
 
         <tr data-w="sw" class="sw">
@@ -360,8 +378,7 @@ footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 0.5px solid var(--bo
           <td style="font-weight:500;">The Real Deal (Facebook)</td>
           <td>Social</td>
           <td>"Miami loves a comeback story. This one comes with a $3 billion price tag."<br><a class="mct-url" href="https://www.facebook.com/therealdealmedia/posts/1656730886455763/" target="_blank" rel="noopener">facebook.com/therealdealmedia&hellip;</a></td>
-          <td>The Real Deal</td>
-          <td>Post</td>
+          <td>The Real Deal</td><td>Post</td>
           <td><span class="bdg bdg-s">Secondary</span></td>
           <td><span class="reach-l">Medium</span></td>
           <td><span class="sd sd-pos"></span>Positive</td>
@@ -374,8 +391,7 @@ footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 0.5px solid var(--bo
           <td style="font-weight:500;">Hawkins CRE</td>
           <td>Trade / newsletter</td>
           <td>Ken Griffin supercharges Miami plans; $3B Little Haiti megaproject revived<br><a class="mct-url" href="https://www.hawkinscre.com/miami-commercial-real-estate-news-june-17-2026-ken-griffin-supercharges-miami-plans-3b-little-haiti-development-megaproject-revived-more/" target="_blank" rel="noopener">hawkinscre.com&hellip;</a></td>
-          <td>N/A</td>
-          <td>Newsletter</td>
+          <td>N/A</td><td>Newsletter</td>
           <td><span class="bdg bdg-s">Secondary</span></td>
           <td><span class="reach-l">Low</span></td>
           <td><span class="sd sd-neu"></span>Neutral</td>
@@ -388,13 +404,12 @@ footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 0.5px solid var(--bo
           <td style="font-weight:500;">MCID Official (YouTube)</td>
           <td>Owned / PR</td>
           <td>Future unveiled: Magic City Innovation District<br><a class="mct-url" href="https://www.youtube.com/watch?v=zYQLP6jVGt0" target="_blank" rel="noopener">youtube.com/watch&hellip;</a></td>
-          <td>MCID</td>
-          <td>Video</td>
+          <td>MCID</td><td>Video</td>
           <td><span class="bdg bdg-s">Secondary</span></td>
           <td><span class="reach-l">Low</span></td>
           <td><span class="sd sd-pos"></span>Positive</td>
           <td><span class="synd-text">Owned channel</span></td>
-          <td><span class="note-text">Owned PR asset, not third-party coverage. Part of coordinated launch push. Logged separately for completeness.</span></td>
+          <td><span class="note-text">Owned PR asset. Part of coordinated launch push.</span></td>
         </tr>
 
         <tr data-w="sw" class="sw">
@@ -402,13 +417,12 @@ footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 0.5px solid var(--bo
           <td style="font-weight:500;">Miami RE Instagram accounts</td>
           <td>Social / Instagram</td>
           <td>"No longer just about startups, it is becoming a land story. $3B+, Zangrillo back."<br><a class="mct-url" href="https://www.instagram.com/p/DZsjLwFCqVl/" target="_blank" rel="noopener">instagram.com/p/DZsjLwFCqVl</a></td>
-          <td>Multiple accounts</td>
-          <td>Posts</td>
+          <td>Multiple accounts</td><td>Posts</td>
           <td><span class="bdg bdg-s">Secondary</span></td>
           <td><span class="reach-u">Unknown</span></td>
           <td><span class="sd sd-pos"></span>Positive</td>
           <td><span class="synd-text">TRD / Bisnow</span></td>
-          <td><span class="note-text">Miami RE and design-style account cluster resharing. "Land story" framing distinct from editorial coverage.</span></td>
+          <td><span class="note-text">Miami RE and design-style account cluster resharing.</span></td>
         </tr>
 
         <tr data-w="sw" class="sw">
@@ -416,13 +430,12 @@ footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 0.5px solid var(--bo
           <td style="font-weight:500;">Whats Good Miami (Instagram)</td>
           <td>Social / Instagram</td>
           <td>Magic City: The $3 billion bet that refused to die<br><a class="mct-url" href="https://www.instagram.com/p/DZsjLwFCqVl/" target="_blank" rel="noopener">instagram.com&hellip;</a></td>
-          <td>@whatsgoodmiami</td>
-          <td>Video / Reel</td>
+          <td>@whatsgoodmiami</td><td>Video / Reel</td>
           <td><span class="bdg bdg-s">Secondary</span></td>
           <td><span class="reach-l">Medium</span></td>
           <td><span class="sd sd-pos"></span>Positive</td>
           <td><span class="synd-text">Original creator content</span></td>
-          <td><span class="note-text">Significant. Original video by a creator, not a trade repost. Story crossing into Miami lifestyle and culture content. Different audience entirely.</span></td>
+          <td><span class="note-text">Original video, not a trade repost. Story crossing into Miami lifestyle audience.</span></td>
         </tr>
 
         <tr data-w="sw" class="sw">
@@ -430,13 +443,12 @@ footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 0.5px solid var(--bo
           <td style="font-weight:500;">Whats Good Miami (TikTok)</td>
           <td>Social / TikTok</td>
           <td>Magic City: The $3 billion bet that refused to die<br><a class="mct-url" href="https://www.tiktok.com/@whatsgoodmiami" target="_blank" rel="noopener">tiktok.com/@whatsgoodmiami</a></td>
-          <td>@whatsgoodmiami</td>
-          <td>Video</td>
+          <td>@whatsgoodmiami</td><td>Video</td>
           <td><span class="bdg bdg-s">Secondary</span></td>
           <td><span class="reach-l">Medium</span></td>
           <td><span class="sd sd-pos"></span>Positive</td>
           <td><span class="synd-text">Same creator, cross-posted</span></td>
-          <td><span class="note-text">TikTok distribution = younger and broader audience than any editorial outlet on this tracker.</span></td>
+          <td><span class="note-text">TikTok distribution reaches younger and broader audience than any editorial outlet on this tracker.</span></td>
         </tr>
 
         <tr data-w="sw" class="sw">
@@ -444,13 +456,12 @@ footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 0.5px solid var(--bo
           <td style="font-weight:500;">Alan Philips (LinkedIn)</td>
           <td>Social / LinkedIn</td>
           <td>#whatsgoodmiami #magiccity #littlehaiti<br><a class="mct-url" href="https://www.linkedin.com/posts/alanphilips_whatsgoodmiami..." target="_blank" rel="noopener">linkedin.com/posts/alanphilips&hellip;</a></td>
-          <td>Alan Philips</td>
-          <td>Post</td>
+          <td>Alan Philips</td><td>Post</td>
           <td><span class="bdg bdg-s">Secondary</span></td>
           <td><span class="reach-u">Unknown</span></td>
           <td><span class="sd sd-pos"></span>Positive</td>
           <td><span class="synd-text">Whats Good Miami video</span></td>
-          <td><span class="note-text">Individual resharing on LinkedIn. Signals story circulating in investor and developer professional networks.</span></td>
+          <td><span class="note-text">Individual resharing on LinkedIn. Story circulating in investor and developer networks.</span></td>
         </tr>
 
         <tr data-w="sw" class="sw">
@@ -458,13 +469,12 @@ footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 0.5px solid var(--bo
           <td style="font-weight:500;">The Real Deal (Video)</td>
           <td>Regional / local</td>
           <td>Trump-pardoned investor to revive $3B Miami megaproject<br><a class="mct-url" href="https://therealdeal.com/video/watch/1PlstRKzN78/" target="_blank" rel="noopener">therealdeal.com/video&hellip;</a></td>
-          <td>N/A</td>
-          <td>Video</td>
+          <td>N/A</td><td>Video</td>
           <td><span class="bdg bdg-s">Secondary</span></td>
           <td><span class="reach-h">High</span></td>
           <td><span class="sd sd-mix"></span>Mixed</td>
           <td><span class="synd-text">TRD Article (15.06.26)</span></td>
-          <td><span class="note-text">Trump-pardoned now in the title. First time in a headline. Watch for national pickup of this angle.</span></td>
+          <td><span class="note-text">Later-format follow-up by TRD.</span></td>
         </tr>
 
         <tr data-w="sw" class="sw">
@@ -472,13 +482,12 @@ footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 0.5px solid var(--bo
           <td style="font-weight:500;">The Real Deal (LinkedIn)</td>
           <td>Social / LinkedIn</td>
           <td>Miami's $3 billion Magic City Innovation District is trying for a second act<br><a class="mct-url" href="https://www.linkedin.com/posts/therealdeal_miamis-3-billion..." target="_blank" rel="noopener">linkedin.com/posts/therealdeal&hellip;</a></td>
-          <td>The Real Deal</td>
-          <td>Post</td>
+          <td>The Real Deal</td><td>Post</td>
           <td><span class="bdg bdg-s">Secondary</span></td>
           <td><span class="reach-l">Medium</span></td>
           <td><span class="sd sd-pos"></span>Positive</td>
           <td><span class="synd-text">TRD Article (15.06.26)</span></td>
-          <td><span class="note-text">New platform for TRD distribution. LinkedIn = professional investor and developer audience.</span></td>
+          <td><span class="note-text">LinkedIn reaches professional investor and developer audience.</span></td>
         </tr>
 
         <tr data-w="sw" class="sw">
@@ -486,13 +495,12 @@ footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 0.5px solid var(--bo
           <td style="font-weight:500;">The Real Deal (YouTube)</td>
           <td>Social / YouTube</td>
           <td>Trump-pardoned investor to revive $3B Miami megaproject<br><a class="mct-url" href="https://www.youtube.com/watch" target="_blank" rel="noopener">youtube.com/watch&hellip;</a></td>
-          <td>The Real Deal</td>
-          <td>Video</td>
+          <td>The Real Deal</td><td>Video</td>
           <td><span class="bdg bdg-s">Secondary</span></td>
           <td><span class="reach-l">Medium</span></td>
           <td><span class="sd sd-mix"></span>Mixed</td>
           <td><span class="synd-text">TRD Video (19.06.26)</span></td>
-          <td><span class="note-text">YouTube upload of TRD video. Logged separately as distinct platform with different search discoverability.</span></td>
+          <td><span class="note-text">YouTube upload of TRD video. Distinct platform with different search discoverability.</span></td>
         </tr>
 
         <tr data-w="sw" class="sw">
@@ -500,13 +508,77 @@ footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 0.5px solid var(--bo
           <td style="font-weight:500;">The Real Deal (Instagram)</td>
           <td>Social</td>
           <td>"A long-dormant $3 billion megaproject in Little Haiti is back..."<br><a class="mct-url" href="https://www.instagram.com/p/DZ2nt81EbWe/" target="_blank" rel="noopener">instagram.com/p/DZ2nt81EbWe</a></td>
-          <td>The Real Deal</td>
-          <td>Post</td>
+          <td>The Real Deal</td><td>Post</td>
           <td><span class="bdg bdg-s">Secondary</span></td>
           <td><span class="reach-l">Medium</span></td>
           <td><span class="sd sd-pos"></span>Positive</td>
           <td><span class="synd-text">TRD Article (15.06.26)</span></td>
-          <td><span class="note-text">New Instagram post, distinct from the June 16 reel. TRD continuing to push the story on social a week after publication.</span></td>
+          <td><span class="note-text">New Instagram post, distinct from the June 16 reel. TRD still pushing the story a week after publication.</span></td>
+        </tr>
+
+        <tr data-w="sw" class="sw" data-new="true">
+          <td style="font-family:var(--mono);font-size:10px;white-space:nowrap;">22.06.26</td>
+          <td style="font-weight:500;">World Red Eye <span class="new-bdg">New</span></td>
+          <td>Regional / local</td>
+          <td>Magic City Innovation District revived with new $3 billion AI-focused vision<br><a class="mct-url" href="https://worldredeye.com/2026/06/wre-news-magic-city-innovation-district-revived-with-new-3-billion-ai-focused-vision/" target="_blank" rel="noopener">worldredeye.com&hellip;</a></td>
+          <td>WRE Staff</td><td>Article</td>
+          <td><span class="bdg bdg-s">Secondary</span></td>
+          <td><span class="reach-l">Medium</span></td>
+          <td><span class="sd sd-pos"></span>Positive</td>
+          <td><span class="synd-text">Bloomberg / TRD (derivative)</span></td>
+          <td><span class="note-text">World Red Eye is Miami's dominant social and lifestyle media brand. Strong local following across demographics.</span></td>
+        </tr>
+
+        <tr data-w="sw" class="sw" data-new="true">
+          <td style="font-family:var(--mono);font-size:10px;white-space:nowrap;">23.06.26</td>
+          <td style="font-weight:500;">VISUALHOUSE (Instagram) <span class="new-bdg">New</span></td>
+          <td>Social / Instagram</td>
+          <td>"A new kind of district is... Magic City Innovation District Little Haiti. Bob Zangrillo (Dragon Global) — early backer."<br><a class="mct-url" href="https://www.instagram.com" target="_blank" rel="noopener">instagram.com&hellip;</a></td>
+          <td>VISUALHOUSE</td><td>Post</td>
+          <td><span class="bdg bdg-s">Secondary</span></td>
+          <td><span class="reach-l">Medium</span></td>
+          <td><span class="sd sd-pos"></span>Positive</td>
+          <td><span class="synd-text">Original content</span></td>
+          <td><span class="note-text">Architecture and branding studio. Creative industry audience. Distinct from CRE and lifestyle circles.</span></td>
+        </tr>
+
+        <tr data-w="sw" class="sw" data-new="true">
+          <td style="font-family:var(--mono);font-size:10px;white-space:nowrap;">~25.06.26</td>
+          <td style="font-weight:500;">The Real Deal (Facebook) <span class="new-bdg">New</span></td>
+          <td>Social</td>
+          <td>"It's been over a decade since technology investor Bob Zangrillo revealed his vision..."<br><a class="mct-url" href="https://www.facebook.com/therealdealmedia/posts/its-been-over-a-decade-since-technology-investor-bob-zangrillo-revealed-his-visi/1653111610151024/" target="_blank" rel="noopener">facebook.com/therealdealmedia&hellip;</a></td>
+          <td>The Real Deal</td><td>Post</td>
+          <td><span class="bdg bdg-s">Secondary</span></td>
+          <td><span class="reach-l">Medium</span></td>
+          <td><span class="sd sd-pos"></span>Positive</td>
+          <td><span class="synd-text">TRD Article (15.06.26)</span></td>
+          <td><span class="note-text">Third distinct Facebook post from TRD on this story. Sustained amplification now 10 days after original article.</span></td>
+        </tr>
+
+        <tr data-w="sw" class="sw" data-new="true">
+          <td style="font-family:var(--mono);font-size:10px;white-space:nowrap;">~22.06.26</td>
+          <td style="font-weight:500;">Mission Matters Business (Instagram) <span class="new-bdg">New</span></td>
+          <td>Social / Instagram</td>
+          <td>"Some visions are too big to kill..."<br><a class="mct-url" href="https://www.instagram.com" target="_blank" rel="noopener">instagram.com&hellip;</a></td>
+          <td>Mission Matters</td><td>Post</td>
+          <td><span class="bdg bdg-s">Secondary</span></td>
+          <td><span class="reach-l">Medium</span></td>
+          <td><span class="sd sd-pos"></span>Positive</td>
+          <td><span class="synd-text">TRD / Bloomberg</span></td>
+          <td><span class="note-text">Business media account amplifying the story. Different audience from CRE trade press.</span></td>
+        </tr>
+
+        <tr data-w="sw" class="sw" data-new="true">
+          <td style="font-family:var(--mono);font-size:10px;white-space:nowrap;">~22.06.26</td>
+          <td style="font-weight:500;">iConnections (Instagram) <span class="new-bdg">New</span></td>
+          <td>Social / Instagram</td>
+          <td>MCID revival coverage amplification<br><a class="mct-url" href="https://www.instagram.com" target="_blank" rel="noopener">instagram.com&hellip;</a></td>
+          <td>iConnections</td><td>Post</td>
+          <td><span class="bdg bdg-s">Secondary</span></td>
+          <td><span class="reach-l">Medium</span></td>
+          <td><span class="sd sd-pos"></span>Positive</td>
+          <td><span class="synd-text">TRD / Bloomberg</span></td>
+          <td><span class="note-text">Financial services network. Story now reaching allocator and institutional investor audience on social.</span></td>
         </tr>
 
         <tr data-w="bk" class="bk">
@@ -514,16 +586,13 @@ footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 0.5px solid var(--bo
           <td style="font-weight:500;">CBS Miami</td>
           <td>Regional / local</td>
           <td>Protest held in Little Haiti over Magic City Innovation District<br><a class="mct-url" href="https://www.cbsnews.com/miami/news/protest-held-in-little-haiti-over-magic-city-innovation-district/" target="_blank" rel="noopener">cbsnews.com/miami&hellip;</a></td>
-          <td>N/A</td>
-          <td>Article</td>
+          <td>N/A</td><td>Article</td>
           <td><span class="bdg bdg-b">Background</span></td>
           <td><span class="reach-l">Medium</span></td>
           <td><span class="sd sd-neg"></span>Negative</td>
           <td><span class="synd-text">Original reporting</span></td>
           <td><span class="note-text">Older protest coverage resurfacing in search. Will reactivate at next commission milestone.</span></td>
         </tr>
-
-
 
       </tbody>
     </table>
@@ -535,48 +604,43 @@ footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 0.5px solid var(--bo
     <div class="asm-grid">
       <div class="asm-card"><div class="asm-lbl">Breadth</div><div class="asm-val asm-val-up">Moderate to high</div><div class="asm-note">Now spans wire, CRE trade, LinkedIn, YouTube, TikTok, and creator content. Still no mainstream crossover.</div></div>
       <div class="asm-card"><div class="asm-lbl">Depth</div><div class="asm-val">Shallow</div><div class="asm-note">Still mostly derivatives of Bloomberg and TRD. No investigative follow-ups detected.</div></div>
-      <div class="asm-card"><div class="asm-lbl">Social velocity</div><div class="asm-val asm-val-up">Medium and growing</div><div class="asm-note">TikTok and LinkedIn now in the mix. Creator content appearing. Story spreading beyond CRE circles.</div></div>
-      <div class="asm-card"><div class="asm-lbl">Trajectory</div><div class="asm-val asm-val-up">Building</div><div class="asm-note">Secondary wave has grown from 4 to 11 items since initial tracking. Story is still moving.</div></div>
+      <div class="asm-card"><div class="asm-lbl">Social velocity</div><div class="asm-val asm-val-up">Medium and growing</div><div class="asm-note">TikTok, LinkedIn, and creative industry accounts now in the mix.</div></div>
+      <div class="asm-card"><div class="asm-lbl">Trajectory</div><div class="asm-val asm-val-up">Building</div><div class="asm-note">Secondary wave has grown from 4 to 16 items over two weeks. Story still moving.</div></div>
     </div>
-
   </div>
 
   <!-- PROTOCOL -->
   <div class="pnl" id="p-pr" role="tabpanel">
-    <p style="font-size:13px;color:var(--text2);line-height:1.65;margin-bottom:1.5rem;">Daily workflow to keep the tracker current. Estimated time per update: 10 minutes.</p>
+    <p style="font-size:13px;color:var(--text2);line-height:1.65;margin-bottom:1.5rem;">Weekly workflow to keep the tracker current. Estimated time per update: 10 to 15 minutes.</p>
     <div class="proto">
-
       <div class="ps">
         <div class="ps-num">1</div>
         <div class="ps-body">
           <div class="ps-title">Perplexity sweep (editorial coverage)</div>
-          <div class="ps-detail">Open Perplexity, set Focus to News, paste the query below and filter to last 24 hours. Do not clean or filter results before bringing them back here.</div>
-          <div class="ps-q">"Bob Zangrillo" OR "Magic City Innovation District" OR "Magic City Miami"<br>Filter: last 24 hours<br>Output: publication name, headline, date, author if available, URL<br>Group by tier: national wire first, then regional, then trade, then blogs, then social<br>Exclude: event listings, casino results, unrelated Magic City references</div>
+          <div class="ps-detail">Open Perplexity, set Focus to News, paste the query below and filter to last 7 days.</div>
+          <div class="ps-q">"Bob Zangrillo" OR "Magic City Innovation District" OR "Magic City Miami"<br>Filter: last 7 days<br>Output: publication name, headline, date, author if available, URL<br>Group by tier: national wire first, then regional, then trade, then blogs, then social<br>Exclude: event listings, casino results, unrelated Magic City references</div>
         </div>
       </div>
-
       <div class="ps">
         <div class="ps-num">2</div>
         <div class="ps-body">
           <div class="ps-title">Google Video sweep (social and creator content)</div>
-          <div class="ps-detail">Perplexity misses video and social content almost entirely. Run this separately on Google.</div>
-          <div class="ps-q">Go to google.com and search:<br>"Bob Zangrillo" OR "Magic City Innovation District"<br><br>Click the Videos tab. Scroll through two pages. Screenshot results and bring back here.<br>You are looking for: TikTok, Instagram reels, YouTube, LinkedIn video, Facebook video.<br>Any platform not captured in the Perplexity sweep.</div>
+          <div class="ps-detail">Perplexity misses video and social content. Run this separately on Google, click the Videos tab, scroll two pages, screenshot and bring back here.</div>
+          <div class="ps-q">google.com search: "Bob Zangrillo" OR "Magic City Innovation District"<br>Click Videos tab. Looking for: TikTok, Instagram reels, YouTube, LinkedIn video, Facebook video.</div>
         </div>
       </div>
-
       <div class="ps">
         <div class="ps-num">3</div>
         <div class="ps-body">
           <div class="ps-title">Paste everything to Claude</div>
-          <div class="ps-detail">Paste the Perplexity output and drop the Google screenshots into the tracking conversation. Claude cleans it, deduplicates, tiers outlets, scores sentiment, adds new rows to the coverage log, and updates the assessment if the trajectory has shifted. No prep needed on your end.</div>
+          <div class="ps-detail">Paste Perplexity output and drop Google screenshots into the tracking conversation. Claude cleans, deduplicates, tiers, scores sentiment, adds new rows, updates assessment, and flags changes from prior week.</div>
         </div>
       </div>
-
       <div class="ps">
         <div class="ps-num">4</div>
         <div class="ps-body">
           <div class="ps-title">Watch for these escalation triggers</div>
-          <div class="ps-detail">These events represent a meaningful shift and warrant a separate alert rather than waiting for the daily sweep.</div>
+          <div class="ps-detail">These warrant an immediate alert rather than waiting for the weekly sweep.</div>
           <div class="chips">
             <div class="chip"><i class="ti ti-alert-triangle" style="font-size:13px;vertical-align:-1px;margin-right:4px;" aria-hidden="true"></i>National outlet picks up the pardon angle</div>
             <div class="chip"><i class="ti ti-alert-triangle" style="font-size:13px;vertical-align:-1px;margin-right:4px;" aria-hidden="true"></i>Commission hearing or permit filing announced</div>
@@ -585,20 +649,18 @@ footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 0.5px solid var(--bo
           </div>
         </div>
       </div>
-
       <div class="ps">
         <div class="ps-num">5</div>
         <div class="ps-body">
           <div class="ps-title">Google Alerts as a passive backstop</div>
-          <div class="ps-detail">Set two Google Alerts running in the background as a passive parallel feed with daily digest delivery.<br><br>Alert 1: "Bob Zangrillo"<br>Alert 2: "Magic City Innovation District"</div>
+          <div class="ps-detail">Two alerts running in the background with daily digest delivery.<br><br>Alert 1: "Bob Zangrillo"<br>Alert 2: "Magic City Innovation District"</div>
         </div>
       </div>
-
     </div>
   </div>
 
   <footer>
-    Magic City Innovation District coverage tracker &nbsp;&middot;&nbsp; Updated 22.06.26 &nbsp;&middot;&nbsp; Confidential
+    Magic City Innovation District coverage tracker &nbsp;&middot;&nbsp; Updated 26.06.26 &nbsp;&middot;&nbsp; Confidential
   </footer>
 
 </div>
@@ -621,7 +683,9 @@ footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 0.5px solid var(--bo
       fbs.forEach(function(x){x.classList.remove('on');});
       b.classList.add('on');
       rows.forEach(function(r){
-        r.style.display=(f==='all'||r.getAttribute('data-w')===f)?'':'none';
+        if(f==='all') r.style.display='';
+        else if(f==='new') r.style.display=r.getAttribute('data-new')==='true'?'':'none';
+        else r.style.display=r.getAttribute('data-w')===f?'':'none';
       });
     });
   });
